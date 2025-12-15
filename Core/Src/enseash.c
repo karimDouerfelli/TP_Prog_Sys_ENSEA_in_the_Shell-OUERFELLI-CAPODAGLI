@@ -14,7 +14,7 @@ void display_message(const char *str) {
     { // when write = -1 it's mean a error 
         
         exit(EXIT_FAILURE);
-    }
+    }}
 int execute_command(char *command){ // Q2 pdf page 56
     int pid , status ; 
     pid= fork();
@@ -22,17 +22,12 @@ int execute_command(char *command){ // Q2 pdf page 56
         //fork error
     return -1;
     }
-    if(pid != 0 ){ // father code 
+    else if(pid != 0 ){ // father code 
         wait(&status);
     }
     else{ // child code 
         execlp(command, command, (char *)NULL); //arguments :(filename, arg0, ...) we dont need the path 
         write(STDERR_FILENO,"Command not found , try sudo install \n",18);
         exit(EXIT_FAILURE);
-
     }
-    exit(EXIT_SUCCESS);
-
 }
-
-};
