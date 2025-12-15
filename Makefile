@@ -29,7 +29,7 @@ all: $(TARGET)
 # Link de l'exécutable
 $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $^
-	@echo "Compilation réussie ! Lancez ./$(TARGET)"
+	@echo "Compiled Successfully  ! Run ./$(TARGET)"
 
 # Compilation des fichiers objets
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)

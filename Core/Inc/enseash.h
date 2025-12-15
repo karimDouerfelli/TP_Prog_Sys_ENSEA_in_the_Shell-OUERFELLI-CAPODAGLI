@@ -5,14 +5,15 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <stdlib.h>
-#include <time.h>
+#include <stdio.h> 
 
 #define BUF_SIZE 1024
-#define WELCOME_MSG "Bienvenue dans le Shell ENSEA.\nPour quitter, tapez 'exit'.\n"
+// Updated to English as requested
+#define WELCOME_MSG "Welcome to ENSEA Shell.\nType 'exit' to quit.\n"
 #define PROMPT "enseash % "
 
-// Declarations
-// On utilise une seule fonction générique pour afficher (Prompt ou Message)
-void display_message(const char *str); 
+// Prototypes
+void display_message(const char *str);
+int execute_command(char *command);
 
 #endif
