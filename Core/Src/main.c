@@ -20,7 +20,7 @@ int main(void) {
     // Flag to check if it's the first loop iteration
     int first_command = 1; 
 
-    display_message(WELCOME_MSG);
+    display_message(GRN WELCOME_MSG NC);
 
     while (1) {
         // --- 1. PROMPT DISPLAY (Logic concentrated here) ---
