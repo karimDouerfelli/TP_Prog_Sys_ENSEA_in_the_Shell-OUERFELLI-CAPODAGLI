@@ -18,6 +18,10 @@ void display_message(const char *str) {
 int execute_command(char *command){ // Q2 pdf page 56
     int pid , status ; 
     pid= fork();
+    if(pid == - 1){
+        //fork error
+    return -1;
+    }
     if(pid != 0 ){ // father code 
         wait(&status);
     }

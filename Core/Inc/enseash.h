@@ -7,12 +7,13 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define BUF_SIZE 1024
+#define BUF_SIZE 1024  //standard for a command input buffer.
 #define WELCOME_MSG "Bienvenue dans le Shell ENSEA.\nPour quitter, tapez 'exit'.\n"
 #define PROMPT "enseash % "
 
 // Declarations
-// On utilise une seule fonction générique pour afficher (Prompt ou Message)
-void display_message(const char *str); 
+// We use one functions to generate the code 
+void display_message(const char *str); //Q1
+int execute_command(char *command); //Q2
 
 #endif
