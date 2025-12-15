@@ -20,7 +20,7 @@ int main(void) {
     // Flag to check if it's the first loop iteration
     int first_command = 1; 
 
-    display_message(GRN WELCOME_MSG NC);
+    display_message(GRN WELCOME_MSG NC); //display the message in green
 
     while (1) {
         // --- 1. PROMPT DISPLAY (Logic concentrated here) ---
@@ -31,14 +31,25 @@ int main(void) {
         } else {
             // Check how the previous command ended and format prompt
             if (WIFEXITED(status)) {
-                // Format: [exit:code|time]
-                // using snprintf for safety (prevent buffer overflow)
-                snprintf(prompt_msg, BUF_SIZE, "enseash [exit:%d|%ldms] %% ", WEXITSTATUS(status), elapsed_ms);
+                int exit_code = WEXITSTATUS(status);
+                
+                if (exit_code == 0) {
+                    // SUCCESS : Display in green
+                    snprintf(prompt_msg, BUF_SIZE, 
+                             "enseash [exit:%d|" GRN "%ldms" NC "] %% ", 
+                             exit_code, elapsed_ms);
+                } else {
+                    // FAILURE : Diplay in red
+                    snprintf(prompt_msg, BUF_SIZE, 
+                             "enseash [" RED "exit:%d" NC "|%ldms] %% ", 
+                             exit_code, elapsed_ms);
+                }
             } else if (WIFSIGNALED(status)) {
-                // Format: [sign:sig|time]
-                snprintf(prompt_msg, BUF_SIZE, "enseash [sign:%d|%ldms] %% ", WTERMSIG(status), elapsed_ms);
+                // SIGNAL :Display in red
+                snprintf(prompt_msg, BUF_SIZE, 
+                         "enseash [" RED "sign:%d" NC "|%ldms] %% ", 
+                         WTERMSIG(status), elapsed_ms);
             } else {
-                // Fallback
                 strncpy(prompt_msg, PROMPT, BUF_SIZE);
             }
             display_message(prompt_msg);
@@ -56,16 +67,14 @@ int main(void) {
 
         // Handle empty input (User just pressed Enter)
         if (strlen(buffer) == 0) {
-            // If empty, we typically don't want to show the previous time/exit code again.
-            // Resetting first_command to 1 allows us to show a clean prompt next loop.
-            // Or simpler: just continue, and it will reprint the previous status. 
-            // Let's stick to simple "continue" as per your previous snippet.
+            status = 0;      // Reset status
+            elapsed_ms = 0;  // Reset elapsed time
             continue; 
         }
         
         // Q3: Exit command
         if (strcmp(buffer, "exit") == 0) {
-            display_message( RED " Bye bye...\n" NC);
+            display_message( RED " Bye bye...\n" NC); //display the message in red
             break;
         }
 
@@ -81,7 +90,7 @@ int main(void) {
         clock_gettime(CLOCK_MONOTONIC, &end);
 
         // Calculate duration in milliseconds
-        // (sec difference * 1000) + (nanosec difference / 1,000,000)
+        // (sec difference * 1000) + (nanosec difference / 1000000)
         elapsed_ms = (end.tv_sec - start.tv_sec) * 1000 + 
                      (end.tv_nsec - start.tv_nsec) / 1000000;
                      

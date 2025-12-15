@@ -1,17 +1,13 @@
 /*
 File : enseash.c
 Author : Capodagli Janus, Ouerfelli Karim
-Description : Implementation of shell functions
+Description : Implementation of shell functions including argument parsing (Q6)
 */
 
 #include "enseash.h"
 
-// Implementation of display_message using write (system call)
 void display_message(const char *str) {
-    // STDOUT_FILENO is usually 1. 
-    // We use strlen because we are forbidden to use printf but allowed string.h
     if (write(STDOUT_FILENO, str, strlen(str)) == -1) {
-        // Handle write error
         perror("write");
         exit(EXIT_FAILURE);
     }
@@ -20,31 +16,48 @@ void display_message(const char *str) {
 int execute_command(char *command) {
     pid_t pid;
     int status;
+    
+    // Q6: Argument parsing variables
+    char *argv[MAX_ARGS]; // Array to store arguments
+    int argc = 0;
+    
+    // 1. Tokenize the command string by spaces
+    // strtok modifies the input string by replacing separators with \0
+    argv[argc] = strtok(command, " ");
+    
+    while (argv[argc] != NULL && argc < MAX_ARGS - 1) {
+        argc++;
+        argv[argc] = strtok(NULL, " "); // Continue scanning the same string
+    }
+    
+    // The argument list must be terminated by NULL for execvp
+    argv[argc] = NULL;
 
-    // 1. Create child process
+    // Safety check: if command was just spaces
+    if (argv[0] == NULL) return 0;
+
+    // 2. Forking process
     pid = fork();
 
     if (pid == -1) {
-        // Critical fork error
         perror("fork");
         return -1;
     }
 
     if (pid == 0) {
         // --- CHILD PROCESS ---
-        // Execute the command. 
-        // execlp searches for the command in the PATH environment variable.
-        // Arguments: (filename, arg0, ..., NULL)
-        execlp(command, command, (char *)NULL);
+        // Q6: We use execvp instead of execlp
+        // execvp takes the filename (argv[0]) and the array of arguments (argv)
+        execvp(argv[0], argv);
 
-        // If we reach here, execlp failed (e.g., command not found)
-        // We print a clean error message without printf
-        write(STDERR_FILENO, "Command not found\n", 18);
-        exit(EXIT_FAILURE); // Child must exit here
+        // If we reach here, execvp failed
+        write(STDERR_FILENO, RED "Command not found\n" NC, 
+                        sizeof(RED "Command not found\n" NC) - 1); 
+                        
+        exit(EXIT_FAILURE); 
     } else {
-        // --- PARENT ---
-        // Wait allows us to retrieve the child's exit status
+        // --- PARENT PROCESS ---
         wait(&status);
-        return status; // Return the status to main for analysis
+        return status;
     }
 }

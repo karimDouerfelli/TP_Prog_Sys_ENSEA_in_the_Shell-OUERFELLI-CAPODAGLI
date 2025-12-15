@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <stdio.h> 
 #include <time.h> 
+#include <fcntl.h>
 
 
 // --- COLORED OUTPUTS ---
@@ -17,6 +18,8 @@
 #define NC  "\033[0m" // No Color (Reset)
 
 #define BUF_SIZE 1024
+#define MAX_ARGS 64
+
 #define WELCOME_MSG "Welcome to ENSEA Shell.\nType 'exit' to quit.\n"
 #define PROMPT "enseash % "
 
