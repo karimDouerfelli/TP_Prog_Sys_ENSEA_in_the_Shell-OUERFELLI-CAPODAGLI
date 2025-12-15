@@ -10,8 +10,9 @@ Description : Implementation of shell functions
 void display_message(const char *str) {
     // STDOUT_FILENO is usually 1. 
     // We use strlen because we are forbidden to use printf but allowed string.h
-    if (write(STDOUT_FILENO, str, strlen(str)) == -1) {
-        // Here if there's an error
+    if (write(STDOUT_FILENO, str, strlen(str)) == -1) // int write(int fileDescriptor, void *buffer, size_t bytesToWrite)
+    { // when write = -1 it's mean a error 
+        
         exit(EXIT_FAILURE);
     }
 }
