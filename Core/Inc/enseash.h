@@ -53,7 +53,7 @@
 #define MSG_CMD_ERR     CLR_RED "Command not found\n" CLR_RESET
 #define PROMPT_TEXT     "enseash % "
 
-// functions definitions ( prototypes)
+// functions declarations ( prototypes)
 
 // I/O functions
 void write_out(const char *str);     // wrapper for write(STDOUT)
