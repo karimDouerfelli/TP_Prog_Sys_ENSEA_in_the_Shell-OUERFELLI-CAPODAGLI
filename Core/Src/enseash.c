@@ -17,6 +17,24 @@ void display_message(const char *str) {
     }}
 int execute_command(char *command){ // Q2 pdf page 56
     int pid , status ; 
+    // Q6
+    // we need pointeurs table to stock "ls","-l"...
+    char *argv[MAX_ARGS];
+    int i = 0;
+    //cleaning the memory 
+    memset(argv,0,sizeof(argv));
+    // 
+    argv[i] = strtok(command," \t\n");
+    while(argv[i] != NULL && i < MAX_ARGS -1){
+        i++;
+        argv[i] = strtok(NULL," \t\n"); //NULL ==> continue on the same chaine 
+    }
+    // execvp need the end of the  tableur with NULL 
+    argv[i]= NULL;
+
+    //if the user put space and enter , argv[0] is NULL
+    if(argv[0]==NULL) return 0;
+
     pid= fork();
     if(pid == - 1){
         //fork error
@@ -27,9 +45,10 @@ int execute_command(char *command){ // Q2 pdf page 56
         return status; // we send the info ot the main 
     }
     else{ // child code 
-        execlp(command, command, (char *)NULL); //arguments :(filename, arg0, ...) we dont need the path 
-        char *errormsg= "Command not found\n";
-        write(STDERR_FILENO,errormsg,strlen(errormsg));
+        execlp(argv[0], argv); //arguments :(filename, arg0, ...) we dont need the path 
+        //char *errormsg= "Command not found\n";
+        //write(STDERR_FILENO,errormsg,strlen(errormsg));
+        perror("Command not found ");
         exit(EXIT_FAILURE);
     }
 }

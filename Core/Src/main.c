@@ -6,7 +6,7 @@ Author : Capodagli Janus, Ouerfelli Karim
 #include "enseash.h"
 #include <time.h>
 
-int main(void) {
+int main(int argc , char **argv) {
     char buffer[BUF_SIZE];
     ssize_t bytes_read; // the number of octet readed 
     char prompt_msg[BUF_SIZE]; // new buffer for dynamic Q4
@@ -22,6 +22,8 @@ int main(void) {
 
     // Q2 REPL boucle 
     while(1){
+        //cleaning the buffer before reading 
+        memset(buffer, 0, BUF_SIZE);
 
         //Q2 command read  ( the R from the boucle )
         bytes_read = read(STDIN_FILENO, buffer, BUF_SIZE -1); // we use read with the standard input (STDIN_FILENO)
@@ -29,7 +31,9 @@ int main(void) {
         if(bytes_read <= 0){
             break;
         }
-        buffer[bytes_read - 1]= '\0'; // replace the end with \0
+        
+        buffer[bytes_read - 1]== '\0';
+
 
         if(strlen(buffer)==0){
             display_message(PROMPT);
